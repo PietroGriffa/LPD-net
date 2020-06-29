@@ -117,14 +117,18 @@ def forward(point_cloud, is_training, bn_decay=None):
                          scope='conv5', bn_decay=bn_decay)
     point_wise_feature = net
 
-    NetVLAD = lp.NetVLAD(feature_size=1024, max_samples=num_points, cluster_size=CLUSTER_SIZE, 
+    NetVLAD = lp.NetVLAD(feature_size=1024, max_samples=num_points, cluster_size=CLUSTER_SIZE,
                     output_dim=OUTPUT_DIM, gating=True, add_batch_norm=True,
                     is_training=is_training)
 
     net= tf.reshape(net,[-1,1024])
     net = tf.nn.l2_normalize(net,1)
+
+    print('NetVLAD input: {}'.format(net))
     output = NetVLAD.forward(net)
-    print(output)
+    # print(output)
+    print('NetVLAD output: {}'.format(output))
+    print(' ')
 
     #normalize to have norm 1
     output = tf.nn.l2_normalize(output,1)
@@ -192,7 +196,7 @@ def lazy_softmargin_loss(q_vec, pos_vecs, neg_vecs):
 
 def quadruplet_loss_sm(q_vec, pos_vecs, neg_vecs, other_neg, m2):
     soft_loss= softmargin_loss(q_vec, pos_vecs, neg_vecs)
-    
+
     best_pos=best_pos_distance(q_vec, pos_vecs)
     num_neg = neg_vecs.get_shape()[1]
     batch = q_vec.get_shape()[0]
@@ -205,11 +209,11 @@ def quadruplet_loss_sm(q_vec, pos_vecs, neg_vecs, other_neg, m2):
 
     total_loss= soft_loss+second_loss
 
-    return total_loss   
+    return total_loss
 
 def lazy_quadruplet_loss_sm(q_vec, pos_vecs, neg_vecs, other_neg, m2):
     soft_loss= lazy_softmargin_loss(q_vec, pos_vecs, neg_vecs)
-    
+
     best_pos=best_pos_distance(q_vec, pos_vecs)
     num_neg = neg_vecs.get_shape()[1]
     batch = q_vec.get_shape()[0]
@@ -227,7 +231,7 @@ def lazy_quadruplet_loss_sm(q_vec, pos_vecs, neg_vecs, other_neg, m2):
 
 def quadruplet_loss(q_vec, pos_vecs, neg_vecs, other_neg, m1, m2):
     trip_loss= triplet_loss(q_vec, pos_vecs, neg_vecs, m1)
-    
+
     best_pos=best_pos_distance(q_vec, pos_vecs)
     num_neg = neg_vecs.get_shape()[1]
     batch = q_vec.get_shape()[0]
@@ -240,11 +244,11 @@ def quadruplet_loss(q_vec, pos_vecs, neg_vecs, other_neg, m1, m2):
 
     total_loss= trip_loss+second_loss
 
-    return total_loss 
+    return total_loss
 
 def lazy_quadruplet_loss(q_vec, pos_vecs, neg_vecs, other_neg, m1, m2):
     trip_loss= lazy_triplet_loss(q_vec, pos_vecs, neg_vecs, m1)
-    
+
     best_pos=best_pos_distance(q_vec, pos_vecs)
     num_neg = neg_vecs.get_shape()[1]
     batch = q_vec.get_shape()[0]
@@ -257,9 +261,4 @@ def lazy_quadruplet_loss(q_vec, pos_vecs, neg_vecs, other_neg, m1, m2):
 
     total_loss= trip_loss+second_loss
 
-    return total_loss  
-
-
-
-
-
+    return total_loss

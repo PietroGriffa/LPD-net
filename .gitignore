@@ -1,5 +1,10 @@
 *.pyc
 *.pickle
 .idea
-log*
 results*
+
+log/* 
+# Ignore lof directory excepet for pretrained weights
+
+setup/*
+!setup/th_setup.sh

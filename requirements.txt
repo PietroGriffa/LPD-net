@@ -1,0 +1,7 @@
+numpy
+pandas
+scipy
+# tensorflow
+tensorflow-gpu==1.4.0
+sklearn
+glog

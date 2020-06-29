@@ -314,7 +314,7 @@ if __name__ == '__main__':
 	                   help="KNN cluster k range end point")
 	parse.add_argument('--k_step', type=int, default=10,
 	                   help="KNN cluster k range step")
-	parse.add_argument('--bin_core_num', type=int, default=10, help="Parallel process file Pool core num")
+	parse.add_argument('--bin_core_num', type=int, default=2, help="Parallel process file Pool core num")
 
 	args = parse.parse_args(sys.argv[1:])
 	main(args)
